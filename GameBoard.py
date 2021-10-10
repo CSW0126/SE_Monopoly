@@ -288,9 +288,10 @@ class GameBoard:
 
                 #if all dead
                 if count >= len(self.players):
+                    #TODO
                     print("END GAME")
                     exit()
-
+        #TODO
         print("End Game, Winner : xxx #TODO")
             
             

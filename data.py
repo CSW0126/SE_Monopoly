@@ -201,6 +201,18 @@ gameRuleBack = [
 ]
 
 # in Block
+no_Effect_Block = [
+    {
+        'type': 'list',
+        'name': 'ans',
+        'message': 'This block has no effect, Pass or Save Game ?',
+        'choices': [
+            'Pass !',
+            'Save Game !'
+        ]
+    } 
+]
+
 enter_RollDice = [
     {
         'type': 'list',
@@ -222,6 +234,19 @@ enter_Property = [
             #'Buy !',
             #'Pass !',
             #'Save Game'
+        ]
+    }
+]
+
+enter_Jail = [
+    {
+        'type': 'list',
+        'name': 'ans',
+        'message': '',
+        'choices': [
+            'Roll dice twice !',
+            'Pay the fine !',
+            'Save Game'
         ]
     }
 ]

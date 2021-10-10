@@ -1,6 +1,6 @@
 from enum import Enum
 
-START_MONEY = 1500
+START_MONEY = 15000
 SALARY = 1500
 MAX_TURN = 100
 

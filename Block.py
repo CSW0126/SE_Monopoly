@@ -1,4 +1,5 @@
 from __future__ import print_function, unicode_literals
+from os import O_WRONLY
 from whaaaaat import prompt
 from random import randrange
 from abc import ABC, abstractclassmethod
@@ -13,7 +14,11 @@ class Block(ABC):
     
     @abstractclassmethod
     def activateBlockEffect(self, player: Player , gameBoard : GameBoard):
-        pass
+        ans = prompt(no_Effect_Block)
+
+        if ans['ans'] == 'Save Game !':
+            #save game
+            gameBoard.saveGame()
 
 # Start Block
 class Start(Block):
@@ -23,17 +28,8 @@ class Start(Block):
         self.name = block_data['Name']
         self.subText = block_data['SubText']
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
-        n = player.playerNumber
-        enter_RollDice[0]['message'] = 'Player ' + str(n) +  ' Roll Dice! (Enter)'
-        ans = prompt(enter_RollDice)
-
-        if ans['ans'] == 'Roll !':
-            rollDice(player)
-        else:
-            #Save GAME
-            #TODO
-            saveGame()
+    def activateBlockEffect(self, player: Player, gameBoard: GameBoard):
+        return super().activateBlockEffect(player, gameBoard)
 
         
         
@@ -55,16 +51,61 @@ class Property(Block):
         self.owner = player
 
     def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
-        n = player.playerNumber
-        enter_RollDice[0]['message'] = 'Player ' + str(n) +  ' Roll Dice! (Enter)'
-        ans = prompt(enter_RollDice)
+        enter_Property[0]['choices'] = []
+        choice = enter_Property[0]['choices']
+        #check owner
+        if self.owner == 'None':
+            #show buy / pass / save game
 
-        if ans['ans'] == 'Roll !':
-            rollDice(player)
+            if player.money < self.price:
+                # not enough money
+                enter_Property[0]['message'] ='Player ' + str(player.playerNumber) + ': Not enough money to buy the property !'
+                choice.append('Pass !')
+                choice.append('Save Game !')
+                ans = prompt(enter_Property)
+                if ans['ans'] == 'Save Game !':
+                    gameBoard.saveGame()
+                
+            else:
+                enter_Property[0]['message'] ='Player ' + str(player.playerNumber) + ': Buy the property ?'
+                choice.append('Buy !')
+                choice.append('Pass !')
+                choice.append('Save Game !')
+                ans = prompt(enter_Property)
+
+                if ans['ans'] ==  'Buy !':
+                    # not enough money
+                    self.owner = player
+                    self.owner.money -= self.price
+                    gameBoard.print_board()
+                elif ans['ans'] == 'Save Game !':
+                    gameBoard.saveGame()
+            
+        elif self.owner.playerNumber == player.playerNumber:
+            #owner show msg only
+            enter_Property[0]['message'] = 'You are the owner, no effect !'
+            choice.append('Pass !')
+            choice.append('Save Game !')
+            ans = prompt(enter_Property)
+
+            if ans['ans'] == 'Save Game !':
+                gameBoard.saveGame()
         else:
-            #Save GAME
-            #TODO
-            saveGame()
+            #pay rent
+            if player.money - self.rent < 0:
+                #not enough money
+                self.owner.money += player.money
+                player.money -= self.rent
+                gameBoard.print_board()
+                input('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.playerNumber))
+
+            else:
+                #normal case
+                self.owner.money += self.rent
+                player.money -= self.rent
+                gameBoard.print_board()
+                input('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.playerNumber))
+
 
 # Income Tax Block
 class IncomeTax(Block):
@@ -77,7 +118,9 @@ class IncomeTax(Block):
 
     def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
         taxNeedToPay =  round((player.money*self.tax/100)/10)*10 
+        input('Player ' + str(player.playerNumber) + ' need to pay the tax: '+ str(taxNeedToPay))
         player.money -= taxNeedToPay
+        gameBoard.print_board()
 
 # Jail , just visiting
 class Jail(Block):
@@ -90,7 +133,7 @@ class Jail(Block):
         self.turn = block_data['Turn']
 
     def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
-        return super().activateBlockEffect(player)
+        return super().activateBlockEffect(player,gameBoard)
 
 # Chance
 class Chance(Block):
@@ -114,13 +157,15 @@ class Chance(Block):
             # gain
             index = self.max // 10
             result = randrange(index+1)*10
+            input('Player '+ str(player.playerNumber) + ' gain $' + str(result))
 
         else:
             # Lose
             index = abs(self.min) // 10
             result = randrange(index+1)*-10
-
+            input('Player '+ str(player.playerNumber) + ' Lose $' + str(result))
         player.money += result
+        gameBoard.print_board()
 
 # free parking
 class FreeParking(Block):
@@ -131,7 +176,7 @@ class FreeParking(Block):
         self.subText = block_data['SubText']
 
     def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
-        return super().activateBlockEffect(player)
+        return super().activateBlockEffect(player,gameBoard)
 
 #Go to Jail
 class GoToJail(Block):
@@ -145,27 +190,12 @@ class GoToJail(Block):
 
 
     def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+        input('Send to Jail !')
         player.position = self.jailPosition
         player.jailLeft = self.turn
+        gameBoard.addToJailList(player, 150)
+        gameBoard.print_board()
 
-def saveGame():
-    #TODO
-    exit()
-
-def rollDice(player:Player):
-    diceResult = dice()
-    input('Dice Result: ' + str(diceResult) + ' (Press Any Key to Continue)')
-    newPos = player.position + diceResult
-    if newPos > 19:
-        newPos -= 20
-        player.addMoney(SALARY) 
-        player.position = newPos
-    else:
-        player.position = newPos
-
-
-def dice():
-    return 1
 
     
 

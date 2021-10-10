@@ -19,6 +19,12 @@ class Player:
         else:
             return False
 
+    def isInJail(self):
+        if self.jailLeft > 0 :
+            return True
+        else:
+            return False
+
     def moveTo(self, diceResult):
         temp = self.position + diceResult
 

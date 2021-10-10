@@ -2,6 +2,7 @@ from typing import List
 import Config
 from Player import *
 from Block import *
+from data import *
 
 
 
@@ -12,6 +13,7 @@ class GameBoard:
         self.blocks = blocks
         self.setCurrentPlayer(players[0])
         self.jailList = []
+        self.fine = 0
 
     def setCurrentPlayer(self, player : Player):
         self.currentPlayer = player
@@ -180,15 +182,81 @@ class GameBoard:
         print(f"║                    ║    Owner: {self.p_owner(self.blocks[4])}     ║                    ║    Owner: {self.p_owner(self.blocks[2])}     ║    Owner: {self.p_owner(self.blocks[1])}     ║                    ║")
         print(f"╚════════════════════╩════════════════════╩════════════════════╩════════════════════╩════════════════════╩════════════════════╝")
 
+    def rollDice(self,player:Player):
+        input('Player ' + str(self.currentPlayer.playerNumber) + ': Roll Dice! (Press Any Key to Continue)')
+        diceResult = self.dice()
+        input('Dice Result: ' + str(diceResult) + ' (Press Any Key to Continue)')
+        newPos = player.position + diceResult
+        if newPos > 19:
+            newPos -= 20
+            player.addMoney(SALARY) 
+            player.position = newPos
+        else:
+            player.position = newPos
+
+        self.print_board()
+
+        self.blocks[self.currentPlayer.position].activateBlockEffect(self.currentPlayer, self)
+
+    def addToJailList(self,player,fine):
+        self.fine = fine
+        self.jailList.append(player)
+
+    def saveGame(self):
+        #TODO
+        exit()
+
+    def dice(self):
+        #TODO
+        return 1
+
+    def rollDiceFace(self):
+        #TODO
+        input('assume same face')
+        return True
+
     def run(self):
+        self.print_board()
 
         while self.turn < MAX_TURN:
-            self.print_board()
-            pos = self.currentPlayer.position
-            self.blocks[pos].activateBlockEffect(self.currentPlayer, self)
+            if self.currentPlayer.isInJail():
+                enter_Jail[0]['message'] = f'Player {self.currentPlayer.playerNumber}  You are in Jail, You can pay $150 / roll the dice twice with same face to leave. (After 3 turns, you still need to pay $150)'
+                ans = prompt(enter_Jail)
+                if ans['ans'] == 'Roll dice twice !':
+                    isPass = self.rollDiceFace()
+                    if isPass:
+                        self.currentPlayer.jailLeft = 0
+                        self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]
+                    else:
+                        self.currentPlayer.jailLeft -= 1
+                        if self.currentPlayer.jailLeft == 0:
+                            self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]    
+                    self.print_board()
+                elif ans['ans'] == 'Pay the fine !':
+                    if self.currentPlayer.money - self.fine < 0:
+                        input(f"Player {self.currentPlayer.playerNumber} You do not have enough money! (Replace the action to Roll dice twice)")
+                        isPass = self.rollDiceFace()
+                        if isPass:
+                            self.currentPlayer.jailLeft = 0
+                            self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]
+                        else:
+                            self.currentPlayer.jailLeft -= 1
+                            if self.currentPlayer.jailLeft == 0:
+                                self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]
+                        self.print_board()
+                    else:
+                        self.currentPlayer.money -= self.fine
+                        self.currentPlayer.jailLeft = 0
+                        self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]
+                        self.print_board()
+                        self.rollDice(self.currentPlayer)
+                else:
+                    #save Game
+                    self.saveGame()
+            else:
+                # roll dice
+                self.rollDice(self.currentPlayer)
 
-            #Add turn
-            #self.turn += 1
             #Next Player
             #get next player
             currentPlayerNo = self.currentPlayer.playerNumber
@@ -222,5 +290,7 @@ class GameBoard:
                 if count >= len(self.players):
                     print("END GAME")
                     exit()
+
+        print("End Game, Winner : xxx #TODO")
             
             

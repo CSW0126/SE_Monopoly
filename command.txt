@@ -9,3 +9,6 @@ pip install 'prompt_toolkit==1.0.14'
 
 \venv\Lib\site-packages\whaaaaat\prompts\list.py
 
+tokens.append((Token.Instruction, ' (Use arrow keys)'))
+change to 
+tokens.append((Token.Instruction, ''))

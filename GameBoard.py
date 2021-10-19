@@ -1,5 +1,4 @@
 from typing import List
-import Config
 from Player import *
 from Block import *
 from data import *
@@ -25,7 +24,7 @@ class GameBoard:
         for i in range(len(self.players)):
             if i == max:
                 break
-            string += ('P' + str(i+1)+ " "+Config.BoardColor[f'P{i+1}'].value + '♣' + Config.BoardColor.END.value +"   ")
+            string += ('P' + str(i+1)+ " "+BoardColor[f'P{i+1}'].value + '♣' + BoardColor.END.value +"   ")
 
         for i in range(MAX-len(self.players)):
             string += "       "
@@ -44,22 +43,8 @@ class GameBoard:
 
     def p_chess_Text(self):
         currentNo = self.currentPlayer.playerNumber
-        string = Config.BoardColor[f'P{currentNo}'].value + '♣' + Config.BoardColor.END.value
+        string = BoardColor[f'P{currentNo}'].value + '♣' + BoardColor.END.value
         return string
-
-    # set turn, for loading save
-    def setRound(self,num):
-        self.turn = num
-
-    # add turn by 1
-    def addRound(self):
-        self.turn += 1
-        # if turn > max, end game
-        if self.turn >= Config.MAX_TURN:
-            #END GAME
-            #TODO
-            print("END GAME")
-
 
     # sort player by money
     def sort_ranking(self):
@@ -86,7 +71,7 @@ class GameBoard:
                 moneyStr += ' '
             n = str(rankedPlayer[pos].playerNumber)
 
-            return str(rank[pos]) + ' │ P' + n + " " + Config.BoardColor[f'P{str(n)}'].value + '♣' +Config.BoardColor.END.value + ' │ $'+ moneyStr
+            return str(rank[pos]) + ' │ P' + n + " " + BoardColor[f'P{str(n)}'].value + '♣' +BoardColor.END.value + ' │ $'+ moneyStr
         except:
             return '- │      │             '
 
@@ -108,7 +93,7 @@ class GameBoard:
         if self.jailList:
             try:
                 n = self.jailList[pos].playerNumber
-                return 'P' + str(n) + ' ' + Config.BoardColor[f'P{str(n)}'].value + '♣' +Config.BoardColor.END.value + ' │ ' + str(self.jailList[pos].jailLeft)+ ' Turn(s) Left '
+                return 'P' + str(n) + ' ' + BoardColor[f'P{str(n)}'].value + '♣' +BoardColor.END.value + ' │ ' + str(self.jailList[pos].jailLeft)+ ' Turn(s) Left '
             except:
                 return '     │                '
         else:
@@ -124,7 +109,7 @@ class GameBoard:
         try:
             for player in self.players:
                 if player.playerNumber == pNum and player.position == position:
-                    return Config.BoardColor[f'P{str(pNum)}'].value + '♣' + Config.BoardColor.END.value
+                    return BoardColor[f'P{str(pNum)}'].value + '♣' + BoardColor.END.value
             return ' '
         except:
             return ' '
@@ -174,7 +159,7 @@ class GameBoard:
         print(f"║    Owner: {self.p_owner(self.blocks[6])}     ║                                                                                   ║    Owner: {self.p_owner(self.blocks[19])}     ║")
         print(f"╠════════════════════╬════════════════════╦════════════════════╦════════════════════╦════════════════════╬════════════════════╣")
         print(f"║                    ║                    ║                    ║                    ║                    ║                    ║")
-        print(f"║ {self.p_chess(5,1)}   ┌───────┐    {self.p_chess(5,4)} ║ {self.p_chess(4,1)}    {self.blocks[4].name}     {self.p_chess(4,4)} ║ {self.p_chess(3,1)}   {self.blocks[3].name}   {self.p_chess(3,4)} ║ {self.p_chess(2,1)}   {self.blocks[2].name}     {self.p_chess(2,4)} ║ {self.p_chess(1,1)}    {self.blocks[1].name}     {self.p_chess(1,4)} ║ {self.p_chess(0,1)} (Salary:${Config.SALARY}) {self.p_chess(0,4)} ║")
+        print(f"║ {self.p_chess(5,1)}   ┌───────┐    {self.p_chess(5,4)} ║ {self.p_chess(4,1)}    {self.blocks[4].name}     {self.p_chess(4,4)} ║ {self.p_chess(3,1)}   {self.blocks[3].name}   {self.p_chess(3,4)} ║ {self.p_chess(2,1)}   {self.blocks[2].name}     {self.p_chess(2,4)} ║ {self.p_chess(1,1)}    {self.blocks[1].name}     {self.p_chess(1,4)} ║ {self.p_chess(0,1)} (Salary:${SALARY}) {self.p_chess(0,4)} ║")
         print(f"║     │{self.blocks[5].name}│      ║                    ║                    ║                    ║                    ║                    ║")
         print(f"║ {self.p_chess(5,2)}   └───────┘    {self.p_chess(5,5)} ║ {self.p_chess(4,2)}    HKD:{self.blocks[4].price}     {self.p_chess(4,5)} ║ {self.p_chess(3,2)}    {self.blocks[3].subText}     {self.p_chess(3,5)} ║ {self.p_chess(2,2)}   HKD:{self.blocks[2].price}      {self.p_chess(2,5)} ║ {self.p_chess(1,2)}    HKD:{self.blocks[1].price}     {self.p_chess(1,5)} ║ {self.p_chess(0,2)}       {self.blocks[0].name}       {self.p_chess(0,5)} ║")
         print(f"║   {self.blocks[5].subText}    ║      Rent:{self.blocks[4].rent}       ║                    ║     Rent:{self.blocks[2].rent}        ║      Rent:{self.blocks[1].rent}       ║                    ║")
@@ -230,7 +215,8 @@ class GameBoard:
                     else:
                         self.currentPlayer.jailLeft -= 1
                         if self.currentPlayer.jailLeft == 0:
-                            self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]    
+                            self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber] 
+                            player.money -= self.fine   
                     self.print_board()
                 elif ans['ans'] == 'Pay the fine !':
                     if self.currentPlayer.money - self.fine < 0:
@@ -243,6 +229,7 @@ class GameBoard:
                             self.currentPlayer.jailLeft -= 1
                             if self.currentPlayer.jailLeft == 0:
                                 self.jailList = [i for i in self.jailList if i.playerNumber != self.currentPlayer.playerNumber]
+                                player.money -= self.fine
                         self.print_board()
                     else:
                         self.currentPlayer.money -= self.fine

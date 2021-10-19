@@ -22,7 +22,7 @@ def main():
         ans = prompt(AskHowManyPlayer, style=style)
         for i in range(int(ans['ans'])):
             #create player
-            temp = Player(i+1, Config.START_MONEY, 0)
+            temp = Player(i+1, START_MONEY, 0)
             players.append(temp)
 
         playerList = players

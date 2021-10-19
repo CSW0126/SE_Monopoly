@@ -3,7 +3,6 @@ from os import O_WRONLY
 from whaaaaat import prompt
 from random import randrange
 from abc import ABC, abstractclassmethod
-from Config import *
 from GameBoard import GameBoard
 from data import *
 from Player import *
@@ -193,7 +192,7 @@ class GoToJail(Block):
         input('Send to Jail !')
         player.position = self.jailPosition
         player.jailLeft = self.turn
-        gameBoard.addToJailList(player, 150)
+        gameBoard.addToJailList(player, self.fine)
         gameBoard.print_board()
 
 

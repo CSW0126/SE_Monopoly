@@ -1,4 +1,5 @@
-from data import *
+from data import SALARY
+
 
 class Player:
     def __init__(self, playerNumber, money , position):
@@ -13,7 +14,8 @@ class Player:
     def addMoney(self, money):
         self.money += money
 
-    def isAlive(self):
+
+    def isAlice(self):
         if self.money > 0:
             return True
         else:

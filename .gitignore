@@ -1,3 +1,8 @@
 
 venv
 __pycache__
+.idea/vcs.xml
+.idea/SE_Monopoly.iml
+.idea/modules.xml
+.idea/misc.xml
+.idea/inspectionProfiles/profiles_settings.xml

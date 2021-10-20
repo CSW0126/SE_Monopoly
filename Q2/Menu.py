@@ -1,6 +1,6 @@
 
 
-def printMenu():
+def print_menu():
     #print header
 
     #print select options
@@ -12,7 +12,7 @@ def printMenu():
     #if answer is 'Check Game Rule', print the game rule
         #print the game rule
         #show option back
-        #if back is selected, call printMenu() again
+        #if back is selected, call print_menu() again
     
     #if answer is 'Exit', call exit()
     pass

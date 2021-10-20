@@ -9,9 +9,9 @@ class Block(ABC):
         self.block_data = block_data
     
     @abstractclassmethod
-    def activateBlockEffect(self, player: Player , gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player , game_board : GameBoard):
         #print save game option
-        #call gameboard.saveGame()
+        #call gameboard.save_game()
         pass
 
 # Start Block
@@ -22,9 +22,9 @@ class Start(Block):
         self.name = block_data['Name']
         self.subText = block_data['SubText']
 
-    def activateBlockEffect(self, player: Player, gameBoard: GameBoard): 
+    def activate_block_effect(self, player: Player, game_board: GameBoard): 
         #call super() no effect
-        return super().activateBlockEffect(player,gameBoard)
+        return super().activate_block_effect(player,game_board)
 
 # Property Block
 class Property(Block):
@@ -36,24 +36,24 @@ class Property(Block):
         self.rent = block_data['Rent']
         self.owner = 'None'
 
-    def resetOwner(self):
+    def reset_owner(self):
         self.owner == 'None'
 
-    def setOwner(self, player: Player):
+    def set_owner(self, player: Player):
         self.owner = player
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player, game_board : GameBoard):
 
         #if owner is None:
             #if player.money < price:
                 #print not enough money,
                 #print option Pass, Save Game
                 #if ans is Pass, pass,
-                #if ans is Save Game, call gameBoard.saveGame()
+                #if ans is Save Game, call game_board.save_game()
             #if player.money >= price:
                 #Ask player to buy the property
                 #print the option Buy, Pass, Save Game
-                #if buy, player.money -= price, setOwner(player), printGameboard()
+                #if buy, player.money -= price, set_owner(player), printGameboard()
                 #if pass, pass
                 #if save Game, save Game
 
@@ -61,7 +61,7 @@ class Property(Block):
             #print no effect
             #print option pass , save game
             #if pass, pass
-            #if save game, call gameBoard.saveGame()
+            #if save game, call game_board.save_game()
 
         #if owner is not None and owner is not the player
             #pay rent
@@ -88,7 +88,7 @@ class IncomeTax(Block):
         self.subText = block_data['SubText']
         self.tax = block_data['Tax']
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player, game_board : GameBoard):
         #calculate the tax: round((player.money*self.tax/100)/10)*10 
         #player.money -= tax
         #print game board
@@ -104,9 +104,9 @@ class Jail(Block):
         self.fine = block_data['Fine']
         self.turn = block_data['Turn']
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player, game_board : GameBoard):
         #call super() no effect
-        return super().activateBlockEffect(player,gameBoard)
+        return super().activate_block_effect(player,game_board)
 
 # Chance
 class Chance(Block):
@@ -118,7 +118,7 @@ class Chance(Block):
         self.min = block_data['min']
         self.max = block_data['max']
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player, game_board : GameBoard):
         # random 0/1
         # 0 = gain
         # 1 = lose
@@ -145,9 +145,9 @@ class FreeParking(Block):
         self.name = block_data['Name']
         self.subText = block_data['SubText']
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player, game_board : GameBoard):
         #call super() no effect
-        return super().activateBlockEffect(player,gameBoard)
+        return super().activate_block_effect(player,game_board)
 
 
 #Go to Jail
@@ -156,15 +156,15 @@ class GoToJail(Block):
         super().__init__(block_data)
         self.position = block_data['Position']
         self.name = block_data['Name']
-        self.jailPosition = block_data['JailPosition']
+        self.jail_position = block_data['JailPosition']
         self.fine = block_data['Fine']
         self.turn = block_data['Turn']
 
 
-    def activateBlockEffect(self, player: Player, gameBoard : GameBoard):
+    def activate_block_effect(self, player: Player, game_board : GameBoard):
         # print message 'Send to Jail !'
-        # set player.position = self.jailPosition
-        # set player.jailLeft = self.turn
-        # call gameBoard.addToJailList(player,self.fine)
+        # set player.position = self.jail_position
+        # set player.jail_left = self.turn
+        # call game_board.add_to_jail_list(player,self.fine)
         # print game board
         pass

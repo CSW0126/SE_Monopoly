@@ -16,7 +16,7 @@ class BoardColor(Enum):
     P6 = '\x1b[6;36;40m'
 
 
-Property_Data = [
+property_data = [
     {
         "Position" : 0,
         "Name": "Go",
@@ -174,7 +174,7 @@ style = style_from_dict({
 })
 
 # in main
-AskHowManyPlayer = [
+ask_how_many_player = [
     {
         'type': 'list',
         'name': 'ans',
@@ -205,7 +205,7 @@ questions = [
 ]
 
 # in menu
-gameRuleBack = [
+game_rule_back = [
     {
         'type': 'list',
         'name': 'choice',
@@ -217,7 +217,7 @@ gameRuleBack = [
 ]
 
 # in Block
-no_Effect_Block = [
+no_effect_block = [
     {
         'type': 'list',
         'name': 'ans',
@@ -229,7 +229,7 @@ no_Effect_Block = [
     } 
 ]
 
-enter_RollDice = [
+enter_roll_dice = [
     {
         'type': 'list',
         'name': 'ans',
@@ -241,7 +241,7 @@ enter_RollDice = [
     }
 ]
 
-enter_Property = [
+enter_property = [
     {
         'type': 'list',
         'name': 'ans',
@@ -254,7 +254,7 @@ enter_Property = [
     }
 ]
 
-enter_Jail = [
+enter_jail = [
     {
         'type': 'list',
         'name': 'ans',

@@ -62,6 +62,10 @@ class GameBoard:
         #return the number
         pass
 
+    def set_current_player(player:Player):
+        #set the current player
+        pass
+
     def run(self):
         #main logic of the game
         #print game board

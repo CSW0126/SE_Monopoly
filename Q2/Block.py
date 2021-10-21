@@ -5,8 +5,10 @@ from Player import Player
 from GameBoard import GameBoard
 
 class Block(ABC):
-    def __init__(self, block_data):
+    def __init__(self, block_data: dict):
         self.block_data = block_data
+        self.position = block_data['Position']
+        self.name = block_data['Name']
     
     @abstractclassmethod
     def activate_block_effect(self, player: Player , game_board : GameBoard):
@@ -18,8 +20,6 @@ class Block(ABC):
 class Start(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.subText = block_data['SubText']
 
     def activate_block_effect(self, player: Player, game_board: GameBoard): 
@@ -30,8 +30,6 @@ class Start(Block):
 class Property(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.price = block_data['Price']
         self.rent = block_data['Rent']
         self.owner = 'None'
@@ -83,8 +81,6 @@ class Property(Block):
 class IncomeTax(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.subText = block_data['SubText']
         self.tax = block_data['Tax']
 
@@ -98,8 +94,6 @@ class IncomeTax(Block):
 class Jail(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.subText = block_data['SubText']
         self.fine = block_data['Fine']
         self.turn = block_data['Turn']
@@ -112,8 +106,6 @@ class Jail(Block):
 class Chance(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.subText = block_data['SubText']
         self.min = block_data['min']
         self.max = block_data['max']
@@ -141,8 +133,6 @@ class Chance(Block):
 class FreeParking(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.subText = block_data['SubText']
 
     def activate_block_effect(self, player: Player, game_board : GameBoard):
@@ -154,8 +144,6 @@ class FreeParking(Block):
 class GoToJail(Block):
     def __init__(self, block_data):
         super().__init__(block_data)
-        self.position = block_data['Position']
-        self.name = block_data['Name']
         self.jail_position = block_data['JailPosition']
         self.fine = block_data['Fine']
         self.turn = block_data['Turn']

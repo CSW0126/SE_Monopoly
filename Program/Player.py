@@ -21,6 +21,12 @@ class Player:
         else:
             return False
 
+    def pay_money(self, money):
+        self.money -= money
+
+    def add_money(self, money):
+        self.money += money
+
 def get_player_by_number(players : List[Player],number : int):
     for player in players:
         if player.player_number == number:

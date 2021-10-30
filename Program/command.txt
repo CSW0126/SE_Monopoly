@@ -1,3 +1,4 @@
+cd Program
 py -m venv venv
 venv/Scripts/activate
 
@@ -7,6 +8,8 @@ https://github.com/markfink/whaaaaat/tree/develop/examples
 pip install whaaaaat
 pip install 'prompt_toolkit==1.0.14'
 
+----------------------------------------------------------
+Go to
 \venv\Lib\site-packages\whaaaaat\prompts\list.py
 
 tokens.append((Token.Instruction, ' (Use arrow keys)'))

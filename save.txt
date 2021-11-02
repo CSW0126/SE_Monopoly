@@ -5,18 +5,47 @@
         "jail_list": [],
         "turn": 1
     },
-    "Owner_data": [],
+    "Owner_data": [
+        {
+            "owner": 1,
+            "position": 1
+        }
+    ],
     "Players": [
         {
             "jail_left": 0,
-            "money": 1500,
+            "money": 700,
             "player_number": 1,
-            "position": 2
+            "position": 0
         },
         {
             "jail_left": 0,
             "money": 1500,
             "player_number": 2,
+            "position": 0
+        },
+        {
+            "jail_left": 0,
+            "money": 1500,
+            "player_number": 3,
+            "position": 0
+        },
+        {
+            "jail_left": 0,
+            "money": 1500,
+            "player_number": 4,
+            "position": 0
+        },
+        {
+            "jail_left": 0,
+            "money": 1500,
+            "player_number": 5,
+            "position": 0
+        },
+        {
+            "jail_left": 0,
+            "money": 1500,
+            "player_number": 6,
             "position": 0
         }
     ]

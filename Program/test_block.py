@@ -53,7 +53,7 @@ class TestBlock(TestCase):
         #create players
         players :List[Player] = []
         for i in range(6):
-            player = Player(i+1,500,0)
+            player = Player(i+1,1500,0)
             players.append(player)
 
         #create blocks
@@ -80,9 +80,15 @@ class TestBlock(TestCase):
         self.assertEqual(result, 'pass')
 
         # select buy
+        print(get_player_by_number(players, 1).money)
         property_block.selection_data[0] = 'Buy !'
         result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
-        self.assertEqual(result, 'pass')
+        self.assertEqual(result, 'Buy !')
+        self.assertEqual(property_block.owner, get_player_by_number(players, 1))
+
+        # when onwer go to his/her property
+        result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        self.assertEqual(property_block.test_print_message, 'You are the owner, no effect !')
 
         #attr check
         self.assertEqual(property_block.name, 'Central')

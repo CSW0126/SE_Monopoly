@@ -90,6 +90,45 @@ class Property(Block):
                     #if save Game, save Game
                     elif ans['ans'] == 'Save Game !':
                         game_board.save_game()
+
+            #if owner is the player:
+            elif self.owner.player_number == player.player_number:
+                #print no effect
+                enter_property[0]['message'] = 'You are the owner, no effect !'
+                #print option pass , save game
+                choice.append('Pass !')
+                choice.append('Save Game !')
+                ans = prompt(enter_property)
+                #if pass, pass
+                #if save game, call game_board.save_game()
+                if ans['ans'] == 'Save Game !': game_board.save_game()
+
+            #if owner is not None and owner is not the player
+            else:
+                #pay rent
+                #if player.money - rent < 0
+                if player.money - self.rent < 0:
+                    #player do not have enough money to play the rent, only add the remaining money to the owner
+                    #owner += player.money
+                    self.owner.money += player.money
+                    
+                    #player.money -= rent
+                    player.money -= self.rent
+                    #printGameboard()
+                    game_board.print_board()
+                    #print message 'do not have enough money to pay ....'
+                    input('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.player_number))
+                
+                else:
+                #if player have enough money to pay
+                    #owner.money += rent
+                    self.owner.money += self.rent
+                    #player.money -= rent
+                    player.money -= self.rent
+                    #printGameBoard
+                    game_board.print_board()
+                    #print message
+                    input('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.player_number))
         else:
             #if owner is None:
             if self.owner is None:
@@ -121,6 +160,7 @@ class Property(Block):
                     if ans['ans'] ==  'Buy !':
                         self.owner = player
                         self.owner.money -= self.price
+                        return 'Buy !'
                         # game_board.print_board()
                     #if pass, pass
                     if ans['ans'] == 'Pass':

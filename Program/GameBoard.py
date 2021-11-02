@@ -22,6 +22,8 @@ class GameBoard:
         self.jailList: List[Player] = []
         #fine
         self.fine    : int= 0
+        self.is_test = False
+        self.select_data = []
 
     def print_board(self):
         self.__reset_owner_of_dead_player()
@@ -173,13 +175,14 @@ class GameBoard:
         #DRAW THE DICE
         #print(dice_face)
         #print(dice_result)
-        print("     ╱ ╲  ")
-        print("    ╱   ╲ ")
-        print("   ╱     ╲ ")
-        print(f"  ╱ {str(pos1_num)}   {str(pos2_num)} ╲ ")
-        print(" ╱         ╲ ")
-        print(f"╱     {str(pos3_num)}     ╲")
-        print("───────────── ")
+        if not self.is_test:
+            print("     ╱ ╲  ")
+            print("    ╱   ╲ ")
+            print("   ╱     ╲ ")
+            print(f"  ╱ {str(pos1_num)}   {str(pos2_num)} ╲ ")
+            print(" ╱         ╲ ")
+            print(f"╱     {str(pos3_num)}     ╲")
+            print("───────────── ")
 
         #test
         #return 1

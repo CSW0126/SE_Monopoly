@@ -12,11 +12,17 @@ class Block(ABC):
         self.block_data : Dict = block_data
         self.position   : int = block_data['Position']
         self.name       : str = block_data['Name']
+        self.is_test     : bool = False
+        self.selection_data : dict = []
     
     @abstractclassmethod
     def activate_block_effect(self, player: Player , game_board : GameBoard):
         #print save game option
-        ans = prompt(no_effect_block)
+        ans = []
+        if not self.is_test:
+            ans = prompt(no_effect_block)
+        else:
+            ans['ans'] = self.selection_data[0]
         #call gameboard.save_game()
         if ans['ans'] == 'Save Game !': game_board.save_game()
 

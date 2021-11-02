@@ -27,20 +27,19 @@ def main():
 
     #if choice == 1:
     elif choice == 1:
-        #TODO
         print("read Save")
-        #try:
+        try:
             #read save
-        f = open('save.txt')
-        data = json.load(f)
-        f.close()
-        game_board = load_game(data)
-        game_board.run()
-        #except:
-            # no Save file, start new game
-            # input('No save, press Any Key to Start New Game')
-            # player_list, block_list =  start_new_game()
-            # GameBoard(player_list,block_list).run()
+            f = open('save.txt')
+            data = json.load(f)
+            f.close()
+            game_board = load_game(data)
+            game_board.run()
+        except:
+            #no Save file, start new game
+            input('No save, press Any Key to Start New Game')
+            player_list, block_list =  start_new_game()
+            GameBoard(player_list,block_list).run()
             
 
     

@@ -1,4 +1,5 @@
 from __future__ import annotations,print_function, unicode_literals
+from logging import log
 from typing import List
 from Block import *
 from Player import Player
@@ -81,11 +82,18 @@ class GameBoard:
         print(f"╚════════════════════╩════════════════════╩════════════════════╩════════════════════╩════════════════════╩════════════════════╝")
 
     def roll_dice(self, player : Player): 
-        #print the text and ask player to press enter to roll dice
-        input('Player ' + str(self.current_player.player_number) + ': Roll Dice! (Press Any Key to Continue)')
-        #get the result of the dice
-        dice_result = self.dice()
-        input('Dice Result: ' + str(dice_result) + ' (Press Any Key to Continue)')
+        test_str = []
+        if not self.is_test:
+            #print the text and ask player to press enter to roll dice
+            input('Player ' + str(self.current_player.player_number) + ': Roll Dice! (Press Any Key to Continue)')
+
+        if not self.is_test:
+            #get the result of the dice
+            dice_result = self.dice()
+            input('Dice Result: ' + str(dice_result) + ' (Press Any Key to Continue)')
+        else:
+            dice_result = self.select_data[0]
+        
         #player move to new position
         new_pos = player.position + dice_result
         #if player's new position > 19
@@ -94,15 +102,23 @@ class GameBoard:
             new_pos -= 20
             #player add salary
             player.money += SALARY
-            input("Pass the Go Block, add $1500")
+            if not self.is_test:
+                input("Pass the Go Block, add $1500")
         #player move to new position
         player.position = new_pos
 
-        #call printBoard() to refresh the game board
-        self.print_board()
+        if not self.is_test:
+            #call printBoard() to refresh the game board
+            self.print_board()
+        else:
+            test_str.append('print_board.called')
 
-        #call activate_block_effect(player) to activate the block effect
-        self.blocks[self.current_player.position].activate_block_effect(self.current_player, self)
+        if not self.is_test:
+            #call activate_block_effect(player) to activate the block effect
+            self.blocks[self.current_player.position].activate_block_effect(self.current_player, self)
+        else:
+            test_str.append('activate_block_effect.called')
+            return test_str
 
 
     def add_to_jail_list(self,player,fine):
@@ -114,7 +130,6 @@ class GameBoard:
 
     def save_game(self):
         #save the game to a file
-        #TODO
         players_dict = []
         property_owner_data = []
         game_stat = {}
@@ -195,19 +210,27 @@ class GameBoard:
         self.current_player : Player = player
 
     def run(self):
+        log_str = []
         #main logic of the game
         #print game board
-        self.print_board()
+        if not self.is_test:
+            self.print_board()
 
         while self.turn < MAX_TURN:
             if self.current_player.is_in_jail():
-                #print in jail option
-                self.__in_jail_option()
+                if not self.is_test:
+                    #print in jail option
+                    self.__in_jail_option()
+                else:
+                    log_str.append("__in_jail_option().call")
             else:
             #if current player not in jail:
-                #roll dice
-                self.print_board()
-                self.roll_dice(self.current_player)
+                if not self.is_test:
+                    #roll dice
+                    self.print_board()
+                    self.roll_dice(self.current_player)
+                else:
+                    log_str.append('roll_dice().call')
 
             #change current player to next player
             current_player_no : int = self.current_player.player_number
@@ -220,7 +243,12 @@ class GameBoard:
                     if player.is_alive():
                         remaining_player += 1
                 if remaining_player == 1:
-                    self.__print_winner_list()
+                    if not self.is_test:
+                        self.__print_winner_list()
+                    else:
+                        log_str.append('self.__print_winner_list().called when all player dead')
+                        return log_str
+
 
                 new_no += 1
                 count += 1
@@ -245,15 +273,22 @@ class GameBoard:
                     #if out of bound exception, reset to first player
                     next_player = self.players[0]
 
-                #if one player left, END game
                 if next_player.is_alive():
                     self.current_player = next_player
                     break
 
+            #if test, only test 1 loop
+            if self.is_test:
+                break
+                
         #end while loop, it means turn == Max_turn
         #end game
         #print winner list
-        self.__print_winner_list()
+        if not self.is_test:
+            self.__print_winner_list()
+        else:
+            log_str.append('__print_winner_list().called out of the while loop')
+            return log_str
 
     def __roll_dice_twice(self):
         #call roll_dice_face twice

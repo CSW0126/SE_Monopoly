@@ -30,8 +30,41 @@ class TestGameBoard(TestCase):
         self.game_board.is_test = True
 
     def test_roll_dice(self):
-        #TODO
-        pass
+        #assume roll 1
+        self.game_board.select_data.append(1)
+
+
+        #case 1:
+        #set player position in 19
+        self.game_board.players[0].position = 19
+        #original money of the player
+        org_money = self.game_board.players[0].money
+        #function call str
+        logStr = self.game_board.roll_dice(self.game_board.players[0])
+        
+        #if roll 1 , player go to Start block, salary += 1500
+        #player position should be in 0
+        self.assertEqual(self.game_board.players[0].position, 0)
+        #player money should be + 1500 (org+2000)
+        self.assertEqual(self.game_board.players[0].money, (org_money + 1500))
+        #2 function call
+        self.assertTrue('print_board.called' in logStr)
+        self.assertTrue('activate_block_effect.called' in logStr)
+
+        #case 2, 
+        #not > 19, player position += 1
+        self.game_board.players[0].position = 18
+        #original money of the player
+        org_money = self.game_board.players[0].money
+        #function call str
+        logStr = self.game_board.roll_dice(self.game_board.players[0])
+        #position is 19
+        self.assertEqual(self.game_board.players[0].position, 19)
+        #money no change
+        self.assertEqual(self.game_board.players[0].money, org_money)
+        #2 function call
+        self.assertTrue('print_board.called' in logStr)
+        self.assertTrue('activate_block_effect.called' in logStr)
 
     def test_add_to_jail_list(self):
 
@@ -53,7 +86,6 @@ class TestGameBoard(TestCase):
 
         self.game_board.jailList.clear
     
-
     def test_save_game(self):
         #fake data
         self.game_board.turn = 2
@@ -102,7 +134,6 @@ class TestGameBoard(TestCase):
         
         self.assertEqual(read_data,game_data)
 
-
     def test_roll_dice_face(self):
         results = []
         #random the dice face 1000 times
@@ -125,7 +156,6 @@ class TestGameBoard(TestCase):
         self.assertTrue(1 in results)
         self.assertTrue(2 in results)
         self.assertTrue(3 in results)
-
 
     def test_dice(self):
         results = []
@@ -150,7 +180,6 @@ class TestGameBoard(TestCase):
         self.assertTrue(3 in results)
         self.assertTrue(4 in results)
 
-    
     def test_set_current_player(self):
         #set current player, and match the player number
         for player in self.players:
@@ -158,8 +187,111 @@ class TestGameBoard(TestCase):
             self.assertEqual(self.game_board.current_player.player_number, player.player_number)
 
     def test_run(self):
-        #TODO
-        pass
+        #case 1 , current player in jail, call __in_jail_option
+        test_player : Player = self.game_board.players[5]  #player 5 should be the last player, end when this player's round end
+        self.game_board.add_to_jail_list(test_player, 150)
+        self.game_board.set_current_player(test_player)
+        test_player.jail_left = 3
+        self.game_board.turn = 99 #1 round left
+
+        log_str = self.game_board.run()
+
+        #should call jail option then call print winner list out of the while loop,
+        self.assertTrue("__in_jail_option().call" in log_str)
+        #current turn >= MAX_TURN, call __print_winner_list
+        self.assertTrue("__print_winner_list().called out of the while loop" in log_str)
+        self.assertEqual(len(log_str), 2)  #should only contain 2 element
+        #turn should be 100 current turn >= MAX_TURN, call __print_winner_list
+        self.assertEqual(self.game_board.turn, 100)
+
+
+        #case 2 , current player not in jail call roll_dice
+        test_player : Player = self.game_board.players[0]
+        self.game_board.turn = 1
+        self.game_board.set_current_player(test_player)
+        test_player.jail_left = 0
+        test_player.position = 0
+
+        log_str = self.game_board.run()
+        #current player is players[1]
+        self.assertEqual(self.game_board.current_player, self.game_board.players[1])
+        self.assertTrue('roll_dice().call' in log_str)
+        self.assertEqual(self.game_board.turn, 1) #turn should not change
+
+
+        #all other situation of changing current player:
+
+        #set player[1] dead, current player would skip this player
+        test_player : Player = self.game_board.players[0]
+        self.game_board.turn = 1
+        self.game_board.set_current_player(test_player)
+        self.game_board.players[1].money = -1000
+
+        log_str = self.game_board.run()
+        #should go to player[2]
+        self.assertEqual(self.game_board.current_player, self.game_board.players[2])
+        self.assertEqual(self.game_board.turn, 1)
+
+        #player[2] also dead, should go from [0] to [3]
+        self.game_board.players[2].money = -1000
+        test_player : Player = self.game_board.players[0]  # current [0]
+        self.game_board.turn = 1
+        self.game_board.set_current_player(test_player)
+        self.game_board.run()
+        self.assertEqual(self.game_board.current_player, self.game_board.players[3]) # [0] to [3]
+        self.assertEqual(self.game_board.turn, 1) #still 1
+
+
+        #reset player data
+        for player in self.game_board.players:
+            player.money = 1000
+            player.jail_left = 0
+            player.position = 1
+
+        #if player [5] dead, current player is [4], change to [0]
+        #turn + 1
+        test_player : Player = self.game_board.players[4]  # current [4]
+        self.game_board.players[5].money = -1000           # [5] dead
+        self.game_board.set_current_player(test_player)    # set current to [4]
+        self.game_board.turn = 1
+        self.game_board.run()
+
+        self.assertEqual(self.game_board.current_player, self.game_board.players[0]) #current become [0]
+        self.assertEqual(self.game_board.turn, 2)                                    # turn become 2
+
+
+        #reset player data
+        for player in self.game_board.players:
+            player.money = 1000
+            player.jail_left = 0
+            player.position = 1
+        #if player [5][0] dead, current player is [4] change to [1]
+        #turn + 1
+        test_player : Player = self.game_board.players[4]  # current [4]
+        self.game_board.players[5].money = -1000           # [5] dead
+        self.game_board.players[0].money = -1000           # [0] dead
+        self.game_board.set_current_player(test_player)    # set current to [4]
+        self.game_board.turn = 2                           # turn 2
+        self.game_board.run()
+
+        self.assertEqual(self.game_board.current_player, self.game_board.players[1]) #current become [1]
+        self.assertEqual(self.game_board.turn, 3)                                    # turn become 3
+
+
+        #set all player dead
+        for player in self.game_board.players:
+            player.money = -1000
+            player.jail_left = 0
+            player.position = 1
+
+        #only player[2] left
+        test_player : Player = self.game_board.players[2]  # current [2]
+        test_player.money = 1000
+        self.game_board.set_current_player(test_player)    # set current to [2]
+        self.game_board.turn = 2
+        log_str = self.game_board.run()
+
+        self.assertTrue('self.__print_winner_list().called when all player dead' in log_str)
 
 if __name__ == '__main__':
     unittest.main()

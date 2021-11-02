@@ -1,11 +1,10 @@
 import sys
-from textwrap import indent
-from unittest import mock, TestCase, result
+from unittest import TestCase
 import unittest
-from GameBoard import *
 from data import *
 from Block import *
 from Player import *
+from GameBoard import *
 
 #https://docs.python.org/3/library/unittest.html#unittest.TestCase.debug
 #py test_gameBoard.py -v

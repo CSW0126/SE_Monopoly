@@ -1,8 +1,16 @@
+# Cheung Sui Wing (21027547D)
+# Lau Man Chun (21027257D)
+# Kwong Chun Him (21028468D)
+# Cheng Chi Kit (21028079D)
+
+
 import unittest
 from Player import *
 
 #https://docs.python.org/3/library/unittest.html#unittest.TestCase.debug
 #py test_player.py -v
+#OR
+#python -m unittest discover  -p 'test_*.py' -v
 
 class TestPlayer(unittest.TestCase):
     

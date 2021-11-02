@@ -1,3 +1,8 @@
+# Cheung Sui Wing (21027547D)
+# Lau Man Chun (21027257D)
+# Kwong Chun Him (21028468D)
+# Cheng Chi Kit (21028079D)
+
 import sys
 from unittest import TestCase
 import unittest
@@ -8,6 +13,8 @@ from GameBoard import *
 
 #https://docs.python.org/3/library/unittest.html#unittest.TestCase.debug
 #py test_gameBoard.py -v
+#OR
+#python -m unittest discover  -p 'test_*.py' -v
 
 class TestGameBoard(TestCase):
 
@@ -112,13 +119,14 @@ class TestGameBoard(TestCase):
         for player in self.game_board.jailList:
             game_stat['jail_list'].append(player.__dict__)
 
+        #generate save data
         game_data = {
             'Players' : players_dict,
             'Owner_data' : property_owner_data,
             'Game_stat': game_stat
         }
 
-        #call save game
+        #call save game, it would generate the save.txt
         self.game_board.save_game()
 
         #read save
@@ -277,7 +285,7 @@ class TestGameBoard(TestCase):
         self.assertEqual(self.game_board.turn, 3)                                    # turn become 3
 
 
-        #set all player dead
+        #set all player dead, call print winner list
         for player in self.game_board.players:
             player.money = -1000
             player.jail_left = 0

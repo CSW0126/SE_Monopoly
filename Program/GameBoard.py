@@ -143,7 +143,9 @@ class GameBoard:
         
         with open('save.txt', 'w') as outfile:
             json.dump(data, outfile, indent=4, sort_keys=True)
-        exit()
+
+        if not self.is_test:
+            exit()
 
     def roll_dice_face(self):
         #[1,2,3], [1,2,4], [1,3,4], [2,3,4]

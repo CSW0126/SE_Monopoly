@@ -1,4 +1,5 @@
 import sys
+from textwrap import indent
 from unittest import mock, TestCase, result
 import unittest
 from GameBoard import *
@@ -33,12 +34,74 @@ class TestGameBoard(TestCase):
         pass
 
     def test_add_to_jail_list(self):
-        #TODO
-        pass
+
+        #add first player to jail, set fine = 150
+        self.game_board.add_to_jail_list(self.players[0], 150)
+        #check the len of the jailList
+        self.assertEqual(len(self.game_board.jailList), 1)
+        #check the jail player object ref
+        self.assertEqual(self.game_board.jailList[0], self.players[0])
+        #check the fine
+        self.assertEqual(self.game_board.fine, 150)
+
+        #add next player
+        self.game_board.add_to_jail_list(self.players[1],150)
+        #check len
+        self.assertEqual(len(self.game_board.jailList),2)
+        #check player number
+        self.assertEqual(self.game_board.jailList[1], self.players[1])
+
+        self.game_board.jailList.clear
+    
 
     def test_save_game(self):
-        #TODO
-        pass
+        #fake data
+        self.game_board.turn = 2
+        self.game_board.add_to_jail_list(self.game_board.players[0],150)
+        self.game_board.add_to_jail_list(self.game_board.players[1],150)
+        self.game_board.blocks[1].owner = self.game_board.players[0]
+
+        players_dict = []
+        property_owner_data = []
+        game_stat = {}
+
+        for player in self.game_board.players:
+            players_dict.append(player.__dict__)
+
+        for block in self.game_board.blocks:
+            if block.__class__.__name__ == 'Property':
+                if block.owner != None:
+                    property_owner_data.append({'position':block.position, 'owner' : block.owner.player_number})
+
+        game_stat['turn'] = self.game_board.turn
+        game_stat['current_player'] = self.game_board.current_player.player_number
+        game_stat['fine'] = self.game_board.fine
+        game_stat['jail_list'] = []
+
+        for player in self.game_board.jailList:
+            game_stat['jail_list'].append(player.__dict__)
+
+        game_data = {
+            'Players' : players_dict,
+            'Owner_data' : property_owner_data,
+            'Game_stat': game_stat
+        }
+
+        #call save game
+        self.game_board.save_game()
+
+        #read save
+        f = open('save.txt')
+        actual_data = json.load(f)
+        f.close()
+
+        #campare game data with read data
+        game_data = json.dumps(game_data, sort_keys=True)
+        read_data = json.dumps(actual_data, sort_keys=True)
+        self.maxDiff = None
+        
+        self.assertEqual(read_data,game_data)
+
 
     def test_roll_dice_face(self):
         results = []
@@ -89,8 +152,10 @@ class TestGameBoard(TestCase):
 
     
     def test_set_current_player(self):
-        #TODO
-        pass
+        #set current player, and match the player number
+        for player in self.players:
+            self.game_board.set_current_player(player=player)
+            self.assertEqual(self.game_board.current_player.player_number, player.player_number)
 
     def test_run(self):
         #TODO

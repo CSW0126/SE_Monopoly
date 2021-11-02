@@ -80,7 +80,6 @@ class TestBlock(TestCase):
         self.assertEqual(result, 'pass')
 
         # select buy
-        print(get_player_by_number(players, 1).money)
         property_block.selection_data[0] = 'Buy !'
         result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
         self.assertEqual(result, 'Buy !')

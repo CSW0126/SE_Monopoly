@@ -1,6 +1,6 @@
 from __future__ import annotations,print_function, unicode_literals
 from abc import ABC, abstractclassmethod
-from typing import Dict
+from typing import Dict, List
 from whaaaaat import prompt
 from random import randrange
 from Player import Player
@@ -12,19 +12,22 @@ class Block(ABC):
         self.block_data : Dict = block_data
         self.position   : int = block_data['Position']
         self.name       : str = block_data['Name']
-        self.is_test     : bool = False
-        self.selection_data : dict = []
+        self.is_test    : bool = False
+        self.selection_data : List = []
     
-    @abstractclassmethod
     def activate_block_effect(self, player: Player , game_board : GameBoard):
         #print save game option
-        ans = []
+        ans = {}
         if not self.is_test:
             ans = prompt(no_effect_block)
+            #call gameboard.save_game()
+            if ans['ans'] == 'Save Game !': game_board.save_game() 
         else:
             ans['ans'] = self.selection_data[0]
-        #call gameboard.save_game()
-        if ans['ans'] == 'Save Game !': game_board.save_game()
+            if ans['ans'] == 'Save Game !' : 
+                return 'game_board.save_game() called'
+            else:
+                return 'pass'
 
 # Start Block
 class Start(Block):

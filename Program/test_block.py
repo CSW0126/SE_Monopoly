@@ -3,6 +3,7 @@ from unittest import TestCase
 import unittest
 from Block import *
 from data import *
+from Player import *
 
 #https://docs.python.org/3/library/unittest.html#unittest.TestCase.debug
 #py test_block.py -v
@@ -43,27 +44,204 @@ class TestBlock(TestCase):
 
         #attr check
         self.assertEqual(start_block.name, 'Go')
+        self.assertEqual(start_block.subText, '<---------')
         self.assertEqual(start_block.position, 0)
         self.assertEqual(start_block.__class__.__name__, 'Start')
 
     
-        def test_property_activate_block_effect(self):
-            pass
+    def test_property_activate_block_effect(self):
+        #create players
+        players :List[Player] = []
+        for i in range(6):
+            player = Player(i+1,500,0)
+            players.append(player)
 
-        def test_incomeTest_activate_block_effect(self):
-            pass
+        #create blocks
+        blocks : List[Block] = []
+        for item in property_data:
+            class_ = getattr(sys.modules[__name__],item['Type'])
+            blocks.append(class_(item))
 
-        def test_jail_activate_block_effect(self):
-            pass
+        #create gameboard
+        game_board : GameBoard = GameBoard(players,blocks)
 
-        def test_chance_activate_block_effect(self):
-            pass
+        #set to test mode
+        property_block = blocks[1] 
+        property_block.is_test = True
 
-        def test_free_parking_activate_block_effect(self):
-            pass
+        #select save game(no owner)
+        property_block.selection_data.append('Save Game !')
+        result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        self.assertEqual(result, 'game_board.save_game() called')
 
-        def test_go_to_jail_activate_block_effect(self):
-            pass
+        #select pass(no owner)
+        property_block.selection_data[0] = 'Pass'
+        result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        self.assertEqual(result, 'pass')
+
+        # select buy
+        property_block.selection_data[0] = 'Buy !'
+        result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        self.assertEqual(result, 'pass')
+
+        #attr check
+        self.assertEqual(property_block.name, 'Central')
+        self.assertEqual(property_block.position, 1)
+        self.assertEqual(property_block.__class__.__name__, 'Property')
+
+    def test_income_tax_activate_block_effect(self):
+        # income tax
+
+        #create players
+        players :List[Player] = []
+        for i in range(6):
+            player = Player(i+1,500,0)
+            players.append(player)
+
+        #create blocks
+        blocks : List[Block] = []
+        for item in property_data:
+            class_ = getattr(sys.modules[__name__],item['Type'])
+            blocks.append(class_(item))
+
+        #create gameboard
+        game_board : GameBoard = GameBoard(players,blocks)
+
+        #set to test mode
+        income_block = blocks[3] 
+        income_block.is_test = True
+
+        # check income tax output
+        taxNeedToPay =  round((get_player_by_number(players, 1).money*income_block.tax/100)/10)*10 
+        result = income_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        self.assertEqual(result, 'Player ' + str(get_player_by_number(players, 1).player_number) + ' need to pay the tax: '+ str(taxNeedToPay))
+
+        #attr check
+        self.assertEqual(income_block.name, 'Income Tax')
+        self.assertEqual(income_block.position, 3)
+        self.assertEqual(income_block.__class__.__name__, 'IncomeTax')
+
+    def test_jail_activate_block_effect(self):
+        #Jail
+
+        #create players
+        players :List[Player] = []
+        for i in range(6):
+            player = Player(i+1,500,0)
+            players.append(player)
+
+        #create blocks
+        blocks : List[Block] = []
+        for item in property_data:
+            class_ = getattr(sys.modules[__name__],item['Type'])
+            blocks.append(class_(item))
+
+        #create gameboard
+        game_board : GameBoard = GameBoard(players,blocks)
+
+        #set to test mode
+        jail_block = blocks[5] 
+        jail_block.is_test = True
+
+        #select save game
+        jail_block.selection_data.append('Save Game !')
+        result = jail_block.activate_block_effect(players, game_board)
+        self.assertEqual(result, 'game_board.save_game() called')
+
+        #select pass
+        jail_block.selection_data[0] = 'Pass'
+        result = jail_block.activate_block_effect(players, game_board)
+        self.assertEqual(result, 'pass')
+
+        #attr check
+        self.assertEqual(jail_block.name, 'In Jail')
+        self.assertEqual(jail_block.subText, 'Just Visiting')
+        self.assertEqual(jail_block.position, 5)
+        self.assertEqual(jail_block.__class__.__name__, 'Jail')
+
+    def test_chance_activate_block_effect(self):
+        pass
+
+    def test_free_parking_activate_block_effect(self):
+        # free parking
+
+        #create players
+        players :List[Player] = []
+        for i in range(6):
+            player = Player(i+1,500,0)
+            players.append(player)
+
+        #create blocks
+        blocks : List[Block] = []
+        for item in property_data:
+            class_ = getattr(sys.modules[__name__],item['Type'])
+            blocks.append(class_(item))
+
+        #create gameboard
+        game_board : GameBoard = GameBoard(players,blocks)
+
+        #set to test mode
+        free_parking_block = blocks[10] 
+        free_parking_block.is_test = True
+
+        #select save game
+        free_parking_block.selection_data.append('Save Game !')
+        result = free_parking_block.activate_block_effect(players, game_board)
+        self.assertEqual(result, 'game_board.save_game() called')
+
+        #select pass
+        free_parking_block.selection_data[0] = 'Pass'
+        result = free_parking_block.activate_block_effect(players, game_board)
+        self.assertEqual(result, 'pass')
+
+        #attr check
+        self.assertEqual(free_parking_block.name, 'Free')
+        self.assertEqual(free_parking_block.subText, 'Parking')
+        self.assertEqual(free_parking_block.position, 10)
+        self.assertEqual(free_parking_block.__class__.__name__, 'FreeParking')
+
+    def test_go_to_jail_block_effect(self):
+        # go to jail 
+
+        #create players
+        players :List[Player] = []
+        for i in range(6):
+            player = Player(i+1,500,0)
+            players.append(player)
+
+        #create blocks
+        blocks : List[Block] = []
+        for item in property_data:
+            class_ = getattr(sys.modules[__name__],item['Type'])
+            blocks.append(class_(item))
+
+        #create gameboard
+        game_board : GameBoard = GameBoard(players,blocks)
+
+        #set to test mode
+        go_to_jail_block = blocks[15] 
+        go_to_jail_block.is_test = True
+
+        # check send to jail output
+        # go_to_jail_block.selection_data.append('Save Game !')
+        result = go_to_jail_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        self.assertEqual(result, 'Send to Jail !')
+
+        # #select pass
+        # go_to_jail_block.selection_data[0] = 'Pass'
+        # result = go_to_jail_block.activate_block_effect(get_player_by_number(players, 0), game_board)
+        # self.assertEqual(result, 'pass')
+
+        #attr check
+        self.assertEqual(go_to_jail_block.name, 'Go To Jail')
+        self.assertEqual(go_to_jail_block.position, 15)
+        self.assertEqual(go_to_jail_block.__class__.__name__, 'GoToJail')
+        # check the player position change to jail or not
+        self.assertEqual(get_player_by_number(players, 1).position, go_to_jail_block.jail_position)
+        # check the player jail left turn is equal to initial jail turn or not
+        self.assertEqual(get_player_by_number(players, 1).jail_left, go_to_jail_block.turn)
+        # check the player is add to jail list or not
+        self.assertEqual(get_player_by_number(players, 1), game_board.jailList[0])
 
 
 if __name__ == '__main__':

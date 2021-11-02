@@ -1,0 +1,23 @@
+{
+    "Game_stat": {
+        "current_player": 1,
+        "fine": 0,
+        "jail_list": [],
+        "turn": 1
+    },
+    "Owner_data": [],
+    "Players": [
+        {
+            "jail_left": 0,
+            "money": 1500,
+            "player_number": 1,
+            "position": 2
+        },
+        {
+            "jail_left": 0,
+            "money": 1500,
+            "player_number": 2,
+            "position": 0
+        }
+    ]
+}

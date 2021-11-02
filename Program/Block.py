@@ -177,10 +177,15 @@ class Property(Block):
                 #print option pass , save game
                 choice.append('Pass !')
                 choice.append('Save Game !')
-                ans = prompt(enter_property)
+                # ans = prompt(enter_property)
+                ans['ans'] = self.selection_data[0]
                 #if pass, pass
+                if ans['ans'] == 'Pass':
+                    return 'pass'
                 #if save game, call game_board.save_game()
-                if ans['ans'] == 'Save Game !': game_board.save_game()
+                if ans['ans'] == 'Save Game !': 
+                    return 'game_board.save_game() called' 
+
 
             #if owner is not None and owner is not the player
             else:
@@ -194,9 +199,9 @@ class Property(Block):
                     #player.money -= rent
                     player.money -= self.rent
                     #printGameboard()
-                    game_board.print_board()
+                    # game_board.print_board()
                     #print message 'do not have enough money to pay ....'
-                    input('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.player_number))
+                    return ('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.player_number))
                 
                 else:
                 #if player have enough money to pay
@@ -205,9 +210,9 @@ class Property(Block):
                     #player.money -= rent
                     player.money -= self.rent
                     #printGameBoard
-                    game_board.print_board()
+                    # game_board.print_board()
                     #print message
-                    input('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.player_number))
+                    return ('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.player_number))
         
 
 # Income Tax Block
@@ -261,24 +266,46 @@ class Chance(Block):
         # 1 = lose
         gainOrLose = randrange(2)
         result = 0
-        #if gain :
-        if gainOrLose == 0:
-            index = self.max // 10
-            result = randrange(index+1)*10
-            #print message
-            input('Player '+ str(player.player_number) + ' gain $' + str(result))
+        if not self.is_test:
+            #if gain :
+            if gainOrLose == 0:
+                index = self.max // 10
+                result = randrange(index+1)*10
+                #print message
+                input('Player '+ str(player.player_number) + ' gain $' + str(result))
 
-        #if lose:
+            #if lose:
+            else:
+                index = abs(self.min) // 10
+                result = randrange(index+1)*-10
+                #print message
+                input('Player '+ str(player.player_number) + ' Lose $' + str(result))
+            player.money += result
+            game_board.print_board()
+
+            #player.money += result
+            #print game board
         else:
-            index = abs(self.min) // 10
-            result = randrange(index+1)*-10
-            #print message
-            input('Player '+ str(player.player_number) + ' Lose $' + str(result))
-        player.money += result
-        game_board.print_board()
+            gainOrLose = self.selection_data[0]
+            #if gain :
+            if gainOrLose == 0:
+                index = self.max // 10
+                result = randrange(index+1)*10
+                player.money += result
+                #print message
+                return ('Player '+ str(player.player_number) + ' gain $' + str(result))
 
-        #player.money += result
-        #print game board
+            #if lose:
+            else:
+                index = abs(self.min) // 10
+                result = randrange(index+1)*-10
+                player.money += result
+                #print message
+                return ('Player '+ str(player.player_number) + ' Lose $' + str(result))
+            # game_board.print_board()
+
+            #player.money += result
+            #print game board
 
 # free parking
 class FreeParking(Block):

@@ -87,8 +87,31 @@ class TestBlock(TestCase):
         self.assertEqual(property_block.owner, get_player_by_number(players, 1))
 
         # when onwer go to his/her property
+        property_block.selection_data[0] = ('Save Game !')
         result = property_block.activate_block_effect(get_player_by_number(players, 1), game_board)
-        self.assertEqual(property_block.test_print_message, 'You are the owner, no effect !')
+        self.assertEqual(property_block.owner, get_player_by_number(players, 1))
+        self.assertEqual(result, 'game_board.save_game() called')
+
+        # test pay rent to the owner(has enough money)
+        expected_player = get_player_by_number(players, 2)
+        expected_owner = get_player_by_number(players, 1)
+        expected_owner_money_result = expected_owner.money + property_block.rent
+        expected_player_money_result = expected_player.money - property_block.rent
+        result = property_block.activate_block_effect(get_player_by_number(players, 2), game_board)
+        self.assertEqual(result, 'Pay the rent $'+ str(property_block.rent) + ' to P' + str(expected_owner.player_number))
+        self.assertEqual(expected_owner_money_result, property_block.owner.money)
+        self.assertEqual(expected_player_money_result, get_player_by_number(players, 2).money)
+
+        # test pay rent to the owner(has enough money)
+        expected_player = get_player_by_number(players, 2)
+        expected_player.money = 5
+        expected_owner = get_player_by_number(players, 1)
+        expected_owner_money_result = expected_owner.money + expected_player.money
+        expected_player_money_result = expected_player.money - property_block.rent
+        result = property_block.activate_block_effect(get_player_by_number(players, 2), game_board)
+        self.assertEqual(result, 'Not enough money to pay the rent ! All remaining money add to the owner P' + str(expected_owner.player_number))
+        self.assertEqual(expected_owner_money_result, property_block.owner.money)
+        self.assertEqual(expected_player_money_result, get_player_by_number(players, 2).money)
 
         #attr check
         self.assertEqual(property_block.name, 'Central')
@@ -166,7 +189,45 @@ class TestBlock(TestCase):
         self.assertEqual(jail_block.__class__.__name__, 'Jail')
 
     def test_chance_activate_block_effect(self):
-        pass
+        # chance
+
+        #create players
+        players :List[Player] = []
+        for i in range(6):
+            player = Player(i+1,500,0)
+            players.append(player)
+
+        #create blocks
+        blocks : List[Block] = []
+        for item in property_data:
+            class_ = getattr(sys.modules[__name__],item['Type'])
+            blocks.append(class_(item))
+
+        #create gameboard
+        game_board : GameBoard = GameBoard(players,blocks)
+
+        #set to test mode
+        chance_block = blocks[8] 
+        chance_block.is_test = True
+
+        # chance to gain money 
+        chance_block.selection_data.append(0)
+        expected_player = get_player_by_number(players, 1)
+        result = chance_block.activate_block_effect(expected_player, game_board)
+        self.assertIn('Player '+ str(expected_player.player_number) + ' gain $', result)
+
+        # chance to lose money
+        chance_block.selection_data[0] = 1
+        expected_player = get_player_by_number(players, 1)
+        result = chance_block.activate_block_effect(expected_player, game_board)
+        self.assertIn('Player '+ str(expected_player.player_number) + ' Lose $', result)
+
+        #attr check
+        self.assertEqual(chance_block.name, 'Chance')
+        self.assertEqual(chance_block.subText, '?')
+        self.assertEqual(chance_block.position, 8)
+        self.assertEqual(chance_block.__class__.__name__, 'Chance')
+
 
     def test_free_parking_activate_block_effect(self):
         # free parking
@@ -247,7 +308,8 @@ class TestBlock(TestCase):
         # check the player jail left turn is equal to initial jail turn or not
         self.assertEqual(get_player_by_number(players, 1).jail_left, go_to_jail_block.turn)
         # check the player is add to jail list or not
-        self.assertEqual(get_player_by_number(players, 1), game_board.jailList[0])
+        # self.assertEqual(get_player_by_number(players, 1), game_board.jailList[0])
+        self.assertIn(get_player_by_number(players, 1), game_board.jailList)
 
 
 if __name__ == '__main__':

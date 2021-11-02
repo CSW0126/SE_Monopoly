@@ -56,77 +56,159 @@ class Property(Block):
     def activate_block_effect(self, player: Player, game_board : GameBoard):
         enter_property[0]['choices'] = []
         choice = enter_property[0]['choices']
-        #if owner is None:
-        if self.owner is None:
-            #if player.money < price:
-            if player.money < self.price:
-                #print not enough money,
-                enter_property[0]['message'] ='Player ' + str(player.player_number) + ': Not enough money to buy the property !'
-                #print option Pass, Save Game
-                choice.append('Pass !')
-                choice.append('Save Game !')
-                ans = prompt(enter_property)
-                #if ans is Pass, pass,
-                #if ans is Save Game, call game_board.save_game()
-                if ans['ans'] == 'Save Game !': game_board.save_game()
-            else:
-            #if player.money >= price:
-                enter_property[0]['message'] ='Player ' + str(player.player_number) + ': Buy the property ?'
-                #Ask player to buy the property
-                #print the option Buy, Pass, Save Game
-                choice.append('Buy !')
-                choice.append('Pass !')
-                choice.append('Save Game !')
-                ans = prompt(enter_property)
+        ans = {}
+        if not self.is_test:
+            #if owner is None:
+            if self.owner is None:
+                #if player.money < price:
+                if player.money < self.price:
+                    #print not enough money,
+                    enter_property[0]['message'] ='Player ' + str(player.player_number) + ': Not enough money to buy the property !'
+                    #print option Pass, Save Game
+                    choice.append('Pass !')
+                    choice.append('Save Game !')
+                    ans = prompt(enter_property)
+                    #if ans is Pass, pass,
+                    #if ans is Save Game, call game_board.save_game()
+                    if ans['ans'] == 'Save Game !': game_board.save_game()
+                else:
+                #if player.money >= price:
+                    enter_property[0]['message'] ='Player ' + str(player.player_number) + ': Buy the property ?'
+                    #Ask player to buy the property
+                    #print the option Buy, Pass, Save Game
+                    choice.append('Buy !')
+                    choice.append('Pass !')
+                    choice.append('Save Game !')
+                    ans = prompt(enter_property)
 
-                #if buy, player.money -= price, set_owner(player), printGameboard()
-                if ans['ans'] ==  'Buy !':
-                    self.owner = player
-                    self.owner.money -= self.price
-                    game_board.print_board()
+                    #if buy, player.money -= price, set_owner(player), printGameboard()
+                    if ans['ans'] ==  'Buy !':
+                        self.owner = player
+                        self.owner.money -= self.price
+                        game_board.print_board()
+                    #if pass, pass
+                    #if save Game, save Game
+                    elif ans['ans'] == 'Save Game !':
+                        game_board.save_game()
+
+            #if owner is the player:
+            elif self.owner.player_number == player.player_number:
+                #print no effect
+                enter_property[0]['message'] = 'You are the owner, no effect !'
+                #print option pass , save game
+                choice.append('Pass !')
+                choice.append('Save Game !')
+                ans = prompt(enter_property)
                 #if pass, pass
-                #if save Game, save Game
-                elif ans['ans'] == 'Save Game !':
-                    game_board.save_game()
+                #if save game, call game_board.save_game()
+                if ans['ans'] == 'Save Game !': game_board.save_game()
 
-        #if owner is the player:
-        elif self.owner.player_number == player.player_number:
-            #print no effect
-            enter_property[0]['message'] = 'You are the owner, no effect !'
-            #print option pass , save game
-            choice.append('Pass !')
-            choice.append('Save Game !')
-            ans = prompt(enter_property)
-            #if pass, pass
-            #if save game, call game_board.save_game()
-            if ans['ans'] == 'Save Game !': game_board.save_game()
-
-        #if owner is not None and owner is not the player
-        else:
-            #pay rent
-            #if player.money - rent < 0
-            if player.money - self.rent < 0:
-                #player do not have enough money to play the rent, only add the remaining money to the owner
-                #owner += player.money
-                self.owner.money += player.money
-                
-                #player.money -= rent
-                player.money -= self.rent
-                #printGameboard()
-                game_board.print_board()
-                #print message 'do not have enough money to pay ....'
-                input('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.player_number))
-            
+            #if owner is not None and owner is not the player
             else:
-            #if player have enough money to pay
-                #owner.money += rent
-                self.owner.money += self.rent
-                #player.money -= rent
-                player.money -= self.rent
-                #printGameBoard
-                game_board.print_board()
-                #print message
-                input('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.player_number))
+                #pay rent
+                #if player.money - rent < 0
+                if player.money - self.rent < 0:
+                    #player do not have enough money to play the rent, only add the remaining money to the owner
+                    #owner += player.money
+                    self.owner.money += player.money
+                    
+                    #player.money -= rent
+                    player.money -= self.rent
+                    #printGameboard()
+                    game_board.print_board()
+                    #print message 'do not have enough money to pay ....'
+                    input('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.player_number))
+                
+                else:
+                #if player have enough money to pay
+                    #owner.money += rent
+                    self.owner.money += self.rent
+                    #player.money -= rent
+                    player.money -= self.rent
+                    #printGameBoard
+                    game_board.print_board()
+                    #print message
+                    input('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.player_number))
+        else:
+            #if owner is None:
+            if self.owner is None:
+                #if player.money < price:
+                if player.money < self.price:
+                    #print not enough money,
+                    enter_property[0]['message'] ='Player ' + str(player.player_number) + ': Not enough money to buy the property !'
+                    #print option Pass, Save Game
+                    choice.append('Pass !')
+                    choice.append('Save Game !')
+                    ans['ans'] = self.selection_data[0]
+                    #if ans is Pass, pass,
+                    if ans['ans'] == 'Pass':
+                        return 'pass'
+                    #if ans is Save Game, call game_board.save_game()
+                    if ans['ans'] == 'Save Game !':
+                        return 'game_board.save_game() called'
+                else:
+                #if player.money >= price:
+                    enter_property[0]['message'] ='Player ' + str(player.player_number) + ': Buy the property ?'
+                    #Ask player to buy the property
+                    #print the option Buy, Pass, Save Game
+                    choice.append('Buy !')
+                    choice.append('Pass !')
+                    choice.append('Save Game !')
+                    ans['ans'] = self.selection_data[0]
+
+                    #if buy, player.money -= price, set_owner(player), printGameboard()
+                    if ans['ans'] ==  'Buy !':
+                        self.owner = player
+                        self.owner.money -= self.price
+                        return 'Buy !'
+                        # game_board.print_board()
+                    #if pass, pass
+                    if ans['ans'] == 'Pass':
+                        return 'pass'
+                    #if save Game, save Game
+                    elif ans['ans'] == 'Save Game !':
+                        # game_board.save_game()
+                        return 'game_board.save_game() called' 
+
+            #if owner is the player:
+            elif self.owner.player_number == player.player_number:
+                #print no effect
+                enter_property[0]['message'] = 'You are the owner, no effect !'
+                #print option pass , save game
+                choice.append('Pass !')
+                choice.append('Save Game !')
+                ans = prompt(enter_property)
+                #if pass, pass
+                #if save game, call game_board.save_game()
+                if ans['ans'] == 'Save Game !': game_board.save_game()
+
+            #if owner is not None and owner is not the player
+            else:
+                #pay rent
+                #if player.money - rent < 0
+                if player.money - self.rent < 0:
+                    #player do not have enough money to play the rent, only add the remaining money to the owner
+                    #owner += player.money
+                    self.owner.money += player.money
+                    
+                    #player.money -= rent
+                    player.money -= self.rent
+                    #printGameboard()
+                    game_board.print_board()
+                    #print message 'do not have enough money to pay ....'
+                    input('Not enough money to pay the rent ! All remaining money add to the owner P' + str(self.owner.player_number))
+                
+                else:
+                #if player have enough money to pay
+                    #owner.money += rent
+                    self.owner.money += self.rent
+                    #player.money -= rent
+                    player.money -= self.rent
+                    #printGameBoard
+                    game_board.print_board()
+                    #print message
+                    input('Pay the rent $'+ str(self.rent) + ' to P' + str(self.owner.player_number))
+        
 
 # Income Tax Block
 class IncomeTax(Block):
@@ -136,13 +218,22 @@ class IncomeTax(Block):
         self.tax     : int = block_data['Tax']
 
     def activate_block_effect(self, player: Player, game_board : GameBoard):
-        #calculate the tax: round((player.money*self.tax/100)/10)*10 
-        taxNeedToPay =  round((player.money*self.tax/100)/10)*10 
-        input('Player ' + str(player.player_number) + ' need to pay the tax: '+ str(taxNeedToPay))
-        #player.money -= tax
-        player.money -= taxNeedToPay
-        #print game board
-        game_board.print_board()
+        if not self.is_test:
+            #calculate the tax: round((player.money*self.tax/100)/10)*10 
+            taxNeedToPay =  round((player.money*self.tax/100)/10)*10 
+            input('Player ' + str(player.player_number) + ' need to pay the tax: '+ str(taxNeedToPay))
+            #player.money -= tax
+            player.money -= taxNeedToPay
+            #print game board
+            game_board.print_board()
+        else:
+            #calculate the tax: round((player.money*self.tax/100)/10)*10 
+            taxNeedToPay =  round((player.money*self.tax/100)/10)*10 
+            #player.money -= tax
+            player.money -= taxNeedToPay
+            #print game board
+            # game_board.print_board()
+            return ('Player ' + str(player.player_number) + ' need to pay the tax: '+ str(taxNeedToPay))
 
 # Jail , just visiting
 class Jail(Block):
@@ -210,13 +301,25 @@ class GoToJail(Block):
 
 
     def activate_block_effect(self, player: Player, game_board : GameBoard):
-        # print message 'Send to Jail !'
-        input('Send to Jail !')
-        # set player.position = self.jail_position
-        player.position = self.jail_position
-        # set player.jail_left = self.turn
-        player.jail_left = self.turn
-        # call game_board.add_to_jail_list(player,self.fine)
-        game_board.add_to_jail_list(player, self.fine)
-        # print game board
-        game_board.print_board()
+
+        if not self.is_test:
+            # print message 'Send to Jail !'
+            input('Send to Jail !')
+            # set player.position = self.jail_position
+            player.position = self.jail_position
+            # set player.jail_left = self.turn
+            player.jail_left = self.turn
+            # call game_board.add_to_jail_list(player,self.fine)
+            game_board.add_to_jail_list(player, self.fine)
+            # print game board
+            game_board.print_board()
+        else:
+            # set player.position = self.jail_position
+            player.position = self.jail_position
+            # set player.jail_left = self.turn
+            player.jail_left = self.turn
+            # call game_board.add_to_jail_list(player,self.fine)
+            game_board.add_to_jail_list(player, self.fine)
+            # print game board
+            # game_board.print_board()
+            return 'Send to Jail !'

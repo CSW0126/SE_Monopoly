@@ -1,71 +1,76 @@
 {
     "Game_stat": {
-        "current_player": 3,
+        "current_player": 2,
         "fine": 150,
-        "jail_list": [
-            {
-                "jail_left": 2,
-                "money": 1110,
-                "player_number": 2,
-                "position": 5
-            }
-        ],
-        "turn": 4
+        "jail_list": [],
+        "turn": 19
     },
     "Owner_data": [
         {
-            "owner": 4,
-            "position": 2
+            "owner": 1,
+            "position": 1
         },
         {
             "owner": 3,
+            "position": 4
+        },
+        {
+            "owner": 2,
             "position": 6
         },
         {
-            "owner": 1,
+            "owner": 2,
+            "position": 7
+        },
+        {
+            "owner": 4,
             "position": 9
         },
         {
-            "owner": 5,
-            "position": 19
+            "owner": 4,
+            "position": 11
+        },
+        {
+            "owner": 2,
+            "position": 13
+        },
+        {
+            "owner": 1,
+            "position": 14
+        },
+        {
+            "owner": 2,
+            "position": 16
+        },
+        {
+            "owner": 1,
+            "position": 17
         }
     ],
     "Players": [
         {
             "jail_left": 0,
-            "money": 1305,
+            "money": 5365,
             "player_number": 1,
-            "position": 12
-        },
-        {
-            "jail_left": 2,
-            "money": 1110,
-            "player_number": 2,
-            "position": 5
+            "position": 17
         },
         {
             "jail_left": 0,
-            "money": 970,
+            "money": 1300,
+            "player_number": 2,
+            "position": 18
+        },
+        {
+            "jail_left": 0,
+            "money": 1895,
             "player_number": 3,
             "position": 13
         },
         {
             "jail_left": 0,
-            "money": 855,
+            "money": 340,
             "player_number": 4,
-            "position": 6
-        },
-        {
-            "jail_left": 0,
-            "money": 2235,
-            "player_number": 5,
-            "position": 2
-        },
-        {
-            "jail_left": 0,
-            "money": 1325,
-            "player_number": 6,
-            "position": 9
+            "position": 5
         }
     ]
 }

@@ -143,8 +143,8 @@ class GameBoard:
                 if block.owner != None:
                     property_owner_data.append({'position':block.position, 'owner' : block.owner.player_number})
         
+        game_stat['current_player'] = self.__find_next_save_player(self.current_player.player_number)
         game_stat['turn'] = self.turn
-        game_stat['current_player'] = self.current_player.player_number
         game_stat['fine'] = self.fine
         game_stat['jail_list'] = []
         for player in self.jailList:
@@ -356,6 +356,33 @@ class GameBoard:
             #call save_game()
             self.save_game()
 
+    def __find_next_save_player(self, current_save_player_number):
+        new_save_no = current_save_player_number
+        next_save_player = None
+        while True:
+            remain_save_player = 0
+            for player in self.players:
+                if player.is_alive():
+                    remain_save_player += 1
+                
+            new_save_no += 1
+
+            found = False
+            #found next player
+            for save_player in self.players:
+                if save_player.player_number == new_save_no:
+                    next_save_player = save_player
+                    found = True
+                    break
+                
+            if not found:
+                new_save_no = 1
+                self.turn += 1
+                next_save_player = self.players[0]
+
+            if next_save_player.is_alive():
+                return next_save_player.player_number
+        return 0
 
     #----------------------Print Text Related method-------------------------
     def __print_winner_list(self):

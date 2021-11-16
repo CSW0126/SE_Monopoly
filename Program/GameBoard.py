@@ -143,7 +143,7 @@ class GameBoard:
                 if block.owner != None:
                     property_owner_data.append({'position':block.position, 'owner' : block.owner.player_number})
         
-        game_stat['current_player'] = self.__find_next_save_player(self.current_player.player_number)
+        game_stat['current_player'] = self.find_next_save_player(self.current_player.player_number)
         game_stat['turn'] = self.turn
         game_stat['fine'] = self.fine
         game_stat['jail_list'] = []
@@ -356,7 +356,7 @@ class GameBoard:
             #call save_game()
             self.save_game()
 
-    def __find_next_save_player(self, current_save_player_number):
+    def find_next_save_player(self, current_save_player_number):
         new_save_no = current_save_player_number
         next_save_player = None
         while True:

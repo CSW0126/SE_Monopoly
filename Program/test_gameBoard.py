@@ -111,8 +111,8 @@ class TestGameBoard(TestCase):
                 if block.owner != None:
                     property_owner_data.append({'position':block.position, 'owner' : block.owner.player_number})
 
-        game_stat['turn'] = self.game_board.turn
         game_stat['current_player'] = self.game_board.find_next_save_player(self.game_board.current_player.player_number)
+        game_stat['turn'] = self.game_board.turn
         game_stat['fine'] = self.game_board.fine
         game_stat['jail_list'] = []
 

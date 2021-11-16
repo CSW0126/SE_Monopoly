@@ -1,52 +1,71 @@
 {
     "Game_stat": {
-        "current_player": 1,
-        "fine": 0,
-        "jail_list": [],
-        "turn": 1
+        "current_player": 3,
+        "fine": 150,
+        "jail_list": [
+            {
+                "jail_left": 2,
+                "money": 1110,
+                "player_number": 2,
+                "position": 5
+            }
+        ],
+        "turn": 4
     },
     "Owner_data": [
         {
+            "owner": 4,
+            "position": 2
+        },
+        {
+            "owner": 3,
+            "position": 6
+        },
+        {
             "owner": 1,
-            "position": 1
+            "position": 9
+        },
+        {
+            "owner": 5,
+            "position": 19
         }
     ],
     "Players": [
         {
             "jail_left": 0,
-            "money": 700,
+            "money": 1305,
             "player_number": 1,
-            "position": 0
+            "position": 12
         },
         {
-            "jail_left": 0,
-            "money": 1500,
+            "jail_left": 2,
+            "money": 1110,
             "player_number": 2,
-            "position": 0
+            "position": 5
         },
         {
             "jail_left": 0,
-            "money": 1500,
+            "money": 970,
             "player_number": 3,
-            "position": 0
+            "position": 13
         },
         {
             "jail_left": 0,
-            "money": 1500,
+            "money": 855,
             "player_number": 4,
-            "position": 0
+            "position": 6
         },
         {
             "jail_left": 0,
-            "money": 1500,
+            "money": 2235,
             "player_number": 5,
-            "position": 0
+            "position": 2
         },
         {
             "jail_left": 0,
-            "money": 1500,
+            "money": 1325,
             "player_number": 6,
-            "position": 0
+            "position": 9
         }
     ]
 }

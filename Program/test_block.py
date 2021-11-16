@@ -147,8 +147,9 @@ class TestBlock(TestCase):
         income_block.is_test = True
 
         # check income tax output
-        taxNeedToPay =  round((get_player_by_number(players, 1).money*income_block.tax/100)/10)*10 
-        result = income_block.activate_block_effect(get_player_by_number(players, 1), game_board)
+        taxNeedToPay =  round((get_player_by_number(players, 1).money*income_block.tax/100)/10)*10 # expected tax need to Pay
+        result = income_block.activate_block_effect(get_player_by_number(players, 1), game_board) # result after activate block effect
+        # check is the tax need to Pay is corrent and the output is corrent
         self.assertEqual(result, 'Player ' + str(get_player_by_number(players, 1).player_number) + ' need to pay the tax: '+ str(taxNeedToPay))
 
         #attr check

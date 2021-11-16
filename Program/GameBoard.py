@@ -8,6 +8,7 @@ from data import *
 from whaaaaat import prompt
 from data import SALARY
 import json
+import os
 
 class GameBoard:
     def __init__(self, players : List[Player], blocks:List[Block]):
@@ -160,7 +161,7 @@ class GameBoard:
             json.dump(data, outfile, indent=4, sort_keys=True)
 
         if not self.is_test:
-            exit()
+            os._exit(1) 
 
     def roll_dice_face(self):
         #[1,2,3], [1,2,4], [1,3,4], [2,3,4]

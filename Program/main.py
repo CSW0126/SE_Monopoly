@@ -8,8 +8,9 @@ from Menu import Menu
 from Player import *
 from data import *
 import json
+import os
 
-
+os.system("color")
 block_list  : List[Block]= []
 player_list : List[Player] = []
 

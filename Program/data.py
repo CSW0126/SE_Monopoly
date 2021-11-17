@@ -279,6 +279,28 @@ game_logo = [
 
 
 rule = [
-    'Rule 1: ',
-    'Rule 2: ',
+    'MOVING AROUND THE BOARD',
+    'A maximum of 6, minimum of 2 players are required to play The Monopoly Game.',
+    '''On your turn, you roll the dice and move your token forward (clockwise around the edge of the board)
+the same number of spaces as the sum of the dice you rolled''',
+    'You must then follow the instructions of whatever space your token lands on.',
+    'Rule 1: If you land on GO or pass over it while moving your token, you collect $1500.',
+    'Rule 2: If you land on Free Parking, nothing bad (or good) happens to you - it\'s just a "free" resting space, you can save your game here.',
+    'Rule 3: If you land on Income Tax, you must calculate 10% of the value of everything you own and pay that much money to the Bank.',
+    'Rule 4: If you land on Chance, you may earn money or lost money',
+    'Rule 5: If you land on a property that no player owns, you may buy it from the Bank at the price printed on the board. Or you may also pass or save the game.',
+    'Rule 6: If you land on a property another player owns, you must pay them the rent that is printed on the board.',
+    'Rule 7: If you land on a Go to Jail, you must go to In Jail',
+    '',
+    'In JAIL',
+    'You can Roll dice twice or Pay the fine',
+    'If you roll a double for your turn, you get to leave Jail and move your token as normal. However, even though you rolled doubles, you don\'t get another turn.',
+    'Pay a fine of $150 to the Bank to leave Jail and move forward according to your roll. If you don\'t roll doubles for three turns in a row, you must pay $150 to bank.',
+    '',
+    'END OF THE GAME',
+    'If your money less than 0, you are bankrupt!',
+    'If the turn is less than 100:',
+    'After all but one of the players have been eliminated, the last remaining player wins.',
+    'If the turn is 100:',
+    'The players who have the most money will wins.'
     ]

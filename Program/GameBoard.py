@@ -405,7 +405,7 @@ class GameBoard:
 
         
         print('\n\n\n\n\n\n')
-        exit()
+        os._exit(1)
 
     def __sort_ranking(self):
         return sorted(self.players, key=lambda x: x.money, reverse=True)

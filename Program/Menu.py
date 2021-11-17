@@ -45,7 +45,7 @@ class Menu:
             #if back is selected, call print_menu() again
             if back['choice'] == 'Back':
                 if not self.is_test:
-                    self.print_menu()
+                    return self.print_menu()
                 else:
                     return 2
         

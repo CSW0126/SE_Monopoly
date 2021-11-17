@@ -281,8 +281,7 @@ game_logo = [
 rule = [
     'MOVING AROUND THE BOARD',
     'A maximum of 6, minimum of 2 players are required to play The Monopoly Game.',
-    '''On your turn, you roll the dice and move your token forward (clockwise around the edge of the board)
-the same number of spaces as the sum of the dice you rolled''',
+    '''On your turn, you roll the dice and move your token forward (clockwise around the edge of the board) the same number of spaces as the sum of the dice you rolled''',
     'You must then follow the instructions of whatever space your token lands on.',
     'Rule 1: If you land on GO or pass over it while moving your token, you collect $1500.',
     'Rule 2: If you land on Free Parking, nothing bad (or good) happens to you - it\'s just a "free" resting space, you can save your game here.',

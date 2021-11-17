@@ -86,12 +86,12 @@ class GameBoard:
         test_str = []
         if not self.is_test:
             #print the text and ask player to press enter to roll dice
-            input('Player ' + str(self.current_player.player_number) + ': Roll Dice! (Press Any Key to Continue)')
+            input('Player ' + str(self.current_player.player_number) + ': Roll Dice! (Press Enter Key to Continue)')
 
         if not self.is_test:
             #get the result of the dice
             dice_result = self.dice()
-            input('Dice Result: ' + str(dice_result) + ' (Press Any Key to Continue)')
+            input('Dice Result: ' + str(dice_result) + ' (Press Enter Key to Continue)')
         else:
             dice_result = self.select_data[0]
         

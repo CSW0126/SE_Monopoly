@@ -3,19 +3,24 @@
         "current_player": 2,
         "fine": 0,
         "jail_list": [],
-        "turn": 1
+        "turn": 2
     },
-    "Owner_data": [],
+    "Owner_data": [
+        {
+            "owner": 1,
+            "position": 2
+        }
+    ],
     "Players": [
         {
             "jail_left": 0,
-            "money": 1350,
+            "money": 865,
             "player_number": 1,
-            "position": 3
+            "position": 5
         },
         {
             "jail_left": 0,
-            "money": 1500,
+            "money": 1435,
             "player_number": 2,
             "position": 2
         }

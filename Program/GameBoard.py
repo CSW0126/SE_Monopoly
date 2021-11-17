@@ -214,8 +214,8 @@ class GameBoard:
         log_str = []
         #main logic of the game
         #print game board
-        if not self.is_test:
-            self.print_board()
+        # if not self.is_test:
+            # self.print_board()
 
         while self.turn < MAX_TURN:
             if self.current_player.is_in_jail():

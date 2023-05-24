@@ -11,4 +11,4 @@ User Menu: [Link](Doc/SE%20Q4%20UserManual%20Document.pdf)<br/>
 ## Screenshots
 <img src="Img/menu.jpg">
 <br><br>
-<img src="Img/main.jpg">
+<img src="Img/Main.jpg">
